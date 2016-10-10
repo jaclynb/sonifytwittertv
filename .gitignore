@@ -93,4 +93,4 @@ ENV/
 auth.txt
 
 # MIDI
-.mid
+*.mid

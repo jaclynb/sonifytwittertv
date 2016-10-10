@@ -5,6 +5,7 @@ from pyknon.music import NoteSeq
 auth_file = "auth.txt"
 with open(auth_file) as f:
 	auth_list = f.readlines()
+f.close()
 
 consumer_key = auth_list[0].strip('\n')
 consumer_secret = auth_list[1].strip('\n')
@@ -16,47 +17,34 @@ api = twitter.Api(consumer_key=consumer_key,
                   access_token_key=access_token_key,
                   access_token_secret=access_token_secret)
 
-#print(api.VerifyCredentials())
+ncis_results = api.GetSearch(term="%23NCIS")
+bbt_results = api.GetSearch(term="%23bigbangtheory")
+bull_results = api.GetSearch(term="%23bull")
+macgyver_results = api.GetSearch(term="%23macgyver")
+madam_results = api.GetSearch(term="%23madamsecretary")
+elementary_results = api.GetSearch(term="%23elementary")
 
-ncis_results = api.GetSearch(raw_query="q=%23NCIS%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-bbt_results = api.GetSearch(raw_query="q=%23bigbangtheory%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-bull_results = api.GetSearch(raw_query="q=%23bull%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-macgyver_results = api.GetSearch(raw_query="q=%23macgyver%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-madam_results = api.GetSearch(raw_query="q=%23madamsecretary%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-elementary_results = api.GetSearch(raw_query="q=%23elementary%20lang%3Aen%20since%3A2016-10-02%20until%3A2016-10-08&src=typd&lang=en")
-
-results = []
 # Major blues scale C, D, D♯/E♭, E, G, A
+results = []
 for twt in ncis_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "C")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "C"))
 for twt in bbt_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "D")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "D"))
 for twt in bull_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "D#")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "D#"))
 for twt in macgyver_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "E")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "E"))
 for twt in madam_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "G")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "G"))
 for twt in elementary_results:
-    time = twt.created_at_in_seconds
-    tpl = (time, "A")
-    results.append(tpl)
+    results.append((twt.created_at_in_seconds, "A"))
 
 results.sort(key=lambda tup: tup[0]) 
 
 notes = ""
 for i in results:
     notes = notes + i[1] + " "
+
 score = NoteSeq(notes)
 midi = Midi(1, tempo=90)
 midi.seq_notes(score, track=0)
