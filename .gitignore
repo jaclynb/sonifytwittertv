@@ -91,3 +91,6 @@ ENV/
 
 # Test Authentication Info
 auth.txt
+
+# MIDI
+.mid
